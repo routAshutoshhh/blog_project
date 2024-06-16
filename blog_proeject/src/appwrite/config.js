@@ -115,22 +115,17 @@ export class Service {
 
   async deleteFile(fileId) {
     try {
-      return await this.bucket.deleteFile(
-        conf.appwriteBucketId,
-
-      )
+      await this.bucket.deleteFile(conf.appwriteBucketId, fileId);
+      return true;
     } catch (error) {
-      console.log("Appwrite  service :: deleteFile :: error " ,error);
+      console.log("Appwrite  service :: deleteFile :: error ", error);
       return false;
     }
   }
 
-  //here since it does not return any kiind of promise hence there is no need toput async await here 
-  getFilePreview(fileId){
-    return this.bucket/this.getFilePreview(
-      conf.appwriteBucketId,,
-      fileId
-    )
+  //here since it does not return any kiind of promise hence there is no need toput async await here
+  getFilePreview(fileId) {
+    return this.bucket.getFilePreview(conf.appwriteBucketId, fileId);
   }
 }
 
