@@ -1,31 +1,30 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React, { useCallback } from "react";
-import { useForm } from "react-hook-form ";
-import { Button, Input, Select, RTE } from "../Index";
+import { useForm } from "react-hook-form";
+import { Button, Input, RTE, Select } from "../Index";
 import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-function PostForm({ post }) {
+export default function PostForm({ post }) {
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
         title: post?.title || "",
-        slug: post?.slug || "",
+        slug: post?.$id || "",
         content: post?.content || "",
         status: post?.status || "active",
       },
     });
 
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
     if (post) {
       const file = data.image[0]
-        ? appwriteService.uploadFile(data.image[0])
+        ? await appwriteService.uploadFile(data.image[0])
         : null;
+
       if (file) {
         appwriteService.deleteFile(post.featuredImage);
       }
@@ -33,23 +32,25 @@ function PostForm({ post }) {
       //here the slug is the $id
       const dbPost = await appwriteService.updatePost(post.$id, {
         ...data,
-        featureedImage: file ? file.$id : undefined,
+        featuredImage: file ? file.$id : undefined,
       });
+
       if (dbPost) {
-        navigate(`/post/$(dbPost.$id)`);
+        navigate(`/post/${dbPost.$id}`);
       }
     } else {
       //in this the user is trying to create a new form unlike above it was for updating the post
       // it is for uploading file
-      const file = await appwriteService.uploadFile(data.images[0]);
+      const file = await appwriteService.uploadFile(data.image[0]);
 
       if (file) {
-        const fileID = file.$id;
-        data.featuredImage = fileID;
+        const fileId = file.$id;
+        data.featuredImage = fileId;
         const dbPost = await appwriteService.createPost({
           ...data,
-          userID: userData.$id,
+          userId: userData.$id,
         });
+
         if (dbPost) {
           navigate(`/post/${dbPost.$id}`);
         }
@@ -62,7 +63,8 @@ function PostForm({ post }) {
       return value
         .trim()
         .toLowerCase()
-        .replace(/^[a-zA-Z\d\s]+/g, "-");
+        .replace(/[^a-zA-Z\d\s]+/g, "-")
+        .replace(/\s/g, "-");
 
     return "";
   }, []);
@@ -70,14 +72,13 @@ function PostForm({ post }) {
   React.useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        setValue("slug", slugTransform(value.title, { shouldValidate: true }));
+        setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
     });
 
+    //UP UNTILL THIS POINT I HAVE SEEN THIS CODE
     //here in this way we can do memory management using unsubscribe method
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
 
   return (
@@ -140,5 +141,3 @@ function PostForm({ post }) {
     </form>
   );
 }
-
-export default PostForm;
