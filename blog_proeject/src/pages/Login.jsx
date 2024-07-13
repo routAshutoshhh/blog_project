@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
-import { Login as LoginComp } from "../components";
+import { Login as LoginComp } from "../components/Login";
 
 function Login() {
   return (
