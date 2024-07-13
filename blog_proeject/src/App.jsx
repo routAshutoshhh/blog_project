@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -27,10 +28,12 @@ function App() {
 
   //conditional rendering
   return !loading ? (
-    <div className="min-h-sc flex flex-wrap content-between bg-gray-400">
+    <div className="min-h-sc flex flex-wrap content-between bg-teal-900">
       <div className="w-full block">
         <Header />
-        <main>TODO: {/* <Outlet/> */}</main>
+        <main>
+          <Outlet />
+        </main>
         <Footer />
       </div>
     </div>
