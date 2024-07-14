@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function Header() {
-  const authStatus = useSelector((state) => state.auth.status);
+  const authStatus = useSelector((state) => state.status);
   const navigate = useNavigate();
 
   //Array of buttons in object form  use for navigation used in producrtion grade app

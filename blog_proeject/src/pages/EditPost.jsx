@@ -1,7 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import appwriteService from "../appwrite/config";
-import { Container } from "../components/container/Container";
-import { PostForm } from "../components/post-form/PostForm";
+import { Container, PostForm } from "../components/Index";
 import { useNavigate, useParams } from "react-router-dom";
 
 function EditPost() {

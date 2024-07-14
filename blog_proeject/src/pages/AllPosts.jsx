@@ -1,7 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import appwriteService from "../appwrite/config";
-import { Container } from "../components/container/Container";
-import { PostCard } from "../components/PostCard";
+import { Container, PostCard } from "../components/Index";
 
 function AllPosts() {
   const [posts, setPosts] = useState([]);

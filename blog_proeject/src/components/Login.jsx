@@ -8,7 +8,7 @@ import authService from "../appwrite/auth";
 
 function Login() {
   const navigate = useNavigate();
-  const dispatch = useDisaptch();
+  const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   const { error, setError } = useState("");
 
